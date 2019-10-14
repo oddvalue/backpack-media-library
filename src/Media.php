@@ -1,10 +1,8 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Oddvalue\BackpackMediaLibrary;
 
-class SkeletonClass
+class Media extends Model
 {
     /**
      * Create a new Skeleton Instance
