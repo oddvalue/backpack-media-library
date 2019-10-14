@@ -42,12 +42,7 @@
     "extra": {
         "branch-alias": {
             "dev-master": "1.0-dev"
-        }
-    },
-    "config": {
-        "sort-packages": true
-    },
-    "extra": {
+        },
         "laravel": {
             "providers": [
                 "Oddvalue\\BackpackMediaLibrary\\BackpackMediaLibraryServiceProvider"
@@ -56,5 +51,8 @@
                 "Skeleton": "Oddvalue\\BackpackMediaLibrary\\MediaFacade"
             }
         }
+    },
+    "config": {
+        "sort-packages": true
     }
 }
