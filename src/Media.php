@@ -3,9 +3,12 @@
 namespace Oddvalue\BackpackMediaLibrary;
 
 use Illuminate\Database\Eloquent\Model;
+use Backpack\CRUD\app\Models\Traits\CrudTrait;
 
 class Media extends Model
 {
+    use CrudTrait;
+
     /**
      * Friendly welcome
      *
