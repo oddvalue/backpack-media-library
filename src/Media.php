@@ -2,16 +2,10 @@
 
 namespace Oddvalue\BackpackMediaLibrary;
 
+use Illuminate\Database\Eloquent\Model;
+
 class Media extends Model
 {
-    /**
-     * Create a new Skeleton Instance
-     */
-    public function __construct()
-    {
-        // constructor body
-    }
-
     /**
      * Friendly welcome
      *
