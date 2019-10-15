@@ -9,20 +9,24 @@ use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 class MediaLibraryCrudController extends CrudController
 {
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
+    use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
+
     public function setup()
     {
-        CRUD::setModel(Media::class);
-        CRUD::setEntityNameStrings(
+        $this->crud->setModel(Media::class);
+        $this->crud->setEntityNameStrings(
             trans('media-library::admin.media'),
             trans('media-library::admin.media')
         );
-        CRUD::setRoute(backpack_url('media-library'));
+        $this->crud->setRoute(backpack_url('media-library'));
     }
     public function setupListOperation()
     {
+        $this->crud->setListView('media-library::crud.list');
+
         // columns to show in the table view
-        CRUD::setColumns([
+        $this->crud->setColumns([
             [
                 'name'  => 'name',
                 'label' => trans('media-library::admin.media'),
@@ -39,7 +43,7 @@ class MediaLibraryCrudController extends CrudController
     }
     public function setupUpdateOperation()
     {
-        CRUD::addField([
+        $this->crud->addField([
             'name'       => 'name',
             'label'      => trans('media-library::admin.media'),
             'type'       => 'text',
@@ -47,6 +51,6 @@ class MediaLibraryCrudController extends CrudController
                 'disabled' => 'disabled',
             ],
         ]);
-        CRUD::addField(json_decode(CRUD::getCurrentEntry()->field, true));
+        $this->crud->addField(json_decode($this->crud->getCurrentEntry()->field, true));
     }
 }
