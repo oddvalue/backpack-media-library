@@ -58,20 +58,25 @@
       </div>
     </div>
     <ul class="nav nav-tabs" role="tablist">
-      <li role="presentation" :class="{'active': isActive('image')}" @click="getFiles('image')">
-        <a role="tab">
+                  <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Home</a></li>
+                  <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Profile</a></li>
+                  <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#messages" role="tab" aria-controls="messages" aria-selected="false">Messages</a></li>
+                </ul>
+    <ul class="nav nav-tabs" role="tablist">
+      <li role="presentation" :class="{'nav-item': true, 'active': isActive('image')}" @click="getFiles('image')">
+        <a role="tab" class="nav-link">
           <span class="icon is-small"><i class="fa fa-image"></i></span>
           <span>Pictures</span>
         </a>
       </li>
-      <li role="presentation" :class="{'active': isActive('pdf')}" @click="getFiles('pdf')">
-        <a role="tab">
+      <li role="presentation" :class="{'nav-item': true, 'active': isActive('pdf')}" @click="getFiles('pdf')">
+        <a role="tab" class="nav-link">
           <span class="icon is-small"><i class="fa fa-file-text-o"></i></span>
           <span>PDF</span>
         </a>
       </li>
-      <li role="presentation" :class="{'active': isActive('misc')}" @click="getFiles('misc')">
-        <a role="tab">
+      <li role="presentation" :class="{'nav-item': true, 'active': isActive('misc')}" @click="getFiles('misc')">
+        <a role="tab" class="nav-link">
           <span class="icon is-small"><i class="fa fa-file"></i></span>
           <span>Misc</span>
         </a>

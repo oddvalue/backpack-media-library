@@ -14,4 +14,10 @@ Route::group([
     'middleware' => ['web', backpack_middleware()],
 ], function () {
     Route::crud('media-library', 'MediaLibraryCrudController');
+    Route::get('media/tags', function() {
+        return [];
+    });
+    Route::get('media/{type}', function() {
+        return \Oddvalue\BackpackMediaLibrary\Media::all();
+    });
 });
