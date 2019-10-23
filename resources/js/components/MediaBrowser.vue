@@ -57,116 +57,115 @@
         </div>
       </div>
     </div>
-    <ul class="nav nav-tabs" role="tablist">
-                  <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Home</a></li>
-                  <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Profile</a></li>
-                  <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#messages" role="tab" aria-controls="messages" aria-selected="false">Messages</a></li>
-                </ul>
-    <ul class="nav nav-tabs" role="tablist">
-      <li role="presentation" :class="{'nav-item': true, 'active': isActive('image')}" @click="getFiles('image')">
-        <a role="tab" class="nav-link">
-          <span class="icon is-small"><i class="fa fa-image"></i></span>
-          <span>Pictures</span>
-        </a>
-      </li>
-      <li role="presentation" :class="{'nav-item': true, 'active': isActive('pdf')}" @click="getFiles('pdf')">
-        <a role="tab" class="nav-link">
-          <span class="icon is-small"><i class="fa fa-file-text-o"></i></span>
-          <span>PDF</span>
-        </a>
-      </li>
-      <li role="presentation" :class="{'nav-item': true, 'active': isActive('misc')}" @click="getFiles('misc')">
-        <a role="tab" class="nav-link">
-          <span class="icon is-small"><i class="fa fa-file"></i></span>
-          <span>Misc</span>
-        </a>
-      </li>
-    </ul>
   </div>
+  <ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="nav-item" @click="getFiles('image')">
+      <a role="tab" :class="{'nav-link': true, 'active': isActive('image')}" href="#">
+        <span class="icon is-small"><i class="fa fa-image"></i></span>
+        Pictures
+        <span class="badge badge-pill badge-default">29</span>
+      </a>
+    </li>
+    <li role="presentation" class="nav-item" @click="getFiles('pdf')">
+      <a role="tab" :class="{'nav-link': true, 'active': isActive('pdf')}" href="#">
+        <span class="icon is-small"><i class="fa fa-file-text-o"></i></span>
+        PDF
+        <span class="badge badge-pill badge-default">29</span>
+      </a>
+    </li>
+    <li role="presentation" class="nav-item" @click="getFiles('misc')">
+      <a role="tab" :class="{'nav-link': true, 'active': isActive('misc')}" href="#">
+        <span class="icon is-small"><i class="fa fa-file"></i></span>
+        Misc
+        <span class="badge badge-pill badge-default">29</span>
+      </a>
+    </li>
+  </ul>
+  <div class="tab-content">
+    <pagination v-model="pagination" @input="changePage"></pagination>
 
-  <pagination v-model="pagination" @input="changePage"></pagination>
-
-  <div class="tabs-details">
-    <div class="text-center tiles">
-    <div class="col-lg-2 col-md-3 col-sm-6" v-if="currentFolder" v-cloak>
-      <drop
-        @drop="moveIntoFolder({ id: currentFolder.parent_id }, ...arguments)"
-        @dragover="upFolderOver = true"
-        @dragleave="upFolderOver = false"
-        :class="{'panel': true, 'panel-info': true, 'is-dropping': upFolderOver}"
-      >
-      <div class="card-image">
-        <div class="panel-body">
-        <a class="text-center center-block" style="font-size: 4em" @click="upFolder(currentFolder)">
-          <i class="fa fa-arrow-left"></i>
-        </a>
-        « Back
+    <div class="tabs-details">
+      <div class="text-center tiles">
+      <div class="col-lg-2 col-md-3 col-sm-6" v-if="currentFolder" v-cloak>
+        <drop
+          @drop="moveIntoFolder({ id: currentFolder.parent_id }, ...arguments)"
+          @dragover="upFolderOver = true"
+          @dragleave="upFolderOver = false"
+          :class="{'card': true, 'card-info': true, 'is-dropping': upFolderOver}"
+        >
+        <div class="card-image">
+          <div class="card-body">
+          <a class="text-center center-block" style="font-size: 4em" @click="upFolder(currentFolder)">
+            <i class="fa fa-arrow-left"></i>
+          </a>
+          « Back
+          </div>
         </div>
+        </drop>
       </div>
-      </drop>
-    </div>
-    <div class="col-lg-2 col-md-3 col-sm-6" v-for="folder in folders" :key="folder.id" v-cloak>
-      <drop
-        @drop="moveIntoFolder(folder, ...arguments)"
-        @dragover="folder.over = true"
-        @dragleave="folder.over = false"
-        :class="{'panel': true, 'panel-primary': true, 'is-dropping': folder.over}"
-      >
-      <drag
-      :draggable="canEdit"  class="card-image" :transfer-data="{type: 'folder', folder: folder}">
-        <button v-if="canDelete" class="btn btn-danger btn-sm delete-btn" title="Delete" @click="prepareToDeleteFolder(folder)">
-          <i class="fa fa-trash"></i> Delete
-        </button>
-        <div class="panel-body">
-        <a class="text-center center-block" style="font-size: 4em" @click="openFolder(folder)">
-          <i class="fa fa-folder"></i>
-        </a>
-        <input class="form-control input-sm" v-if="folder === editingFolder" v-autofocus @keyup.enter="updateFolder(folder)" @blur="updateFolder(folder)" type="text" :placeholder="folder.name" v-model="folder.name">
-        <div @click="editFolder(folder)" v-else title="Click to edit folder name">
-          {{ folder.caption || folder.name }}
-        </div>
-        </div>
-      </drag>
-      </drop>
-    </div>
-    </div>
-    <hr>
-    <div class="text-center tiles">
-
-      <div class="col-sm-12 col-md-4 col-md-offset-4 text-center p-5" v-if="pagination.total == 0" v-cloak>
-        <figure>
-        <i class="fa fa-folder-open-o" style="font-size: 4em"></i>
-        <figcaption>
-          <p class="title is-2">
-          This folder is empty!
-          </p>
-        </figcaption>
-        </figure>
+      <div class="col-lg-2 col-md-3 col-sm-6" v-for="folder in folders" :key="folder.id" v-cloak>
+        <drop
+          @drop="moveIntoFolder(folder, ...arguments)"
+          @dragover="folder.over = true"
+          @dragleave="folder.over = false"
+          :class="{'card': true, 'card-primary': true, 'is-dropping': folder.over}"
+        >
+        <drag
+        :draggable="canEdit"  class="card-image" :transfer-data="{type: 'folder', folder: folder}">
+          <button v-if="canDelete" class="btn btn-danger btn-sm delete-btn" title="Delete" @click="prepareToDeleteFolder(folder)">
+            <i class="fa fa-trash"></i> Delete
+          </button>
+          <div class="card-body">
+          <a class="text-center center-block" style="font-size: 4em" @click="openFolder(folder)">
+            <i class="fa fa-folder"></i>
+          </a>
+          <input class="form-control input-sm" v-if="folder === editingFolder" v-autofocus @keyup.enter="updateFolder(folder)" @blur="updateFolder(folder)" type="text" :placeholder="folder.name" v-model="folder.name">
+          <div @click="editFolder(folder)" v-else title="Click to edit folder name">
+            {{ folder.caption || folder.name }}
+          </div>
+          </div>
+        </drag>
+        </drop>
       </div>
+      </div>
+      <hr>
+      <div class="text-center tiles">
 
-      <transition name="fade">
-        <div class="loader" v-if="loading">
-          <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
-          <span class="sr-only">Loading...</span>
+        <div class="col-sm-12 col-md-4 col-md-offset-4 text-center p-5" v-if="pagination.total == 0" v-cloak>
+          <figure>
+          <i class="fa fa-folder-open-o" style="font-size: 4em"></i>
+          <figcaption>
+            <p class="title is-2">
+            This folder is empty!
+            </p>
+          </figcaption>
+          </figure>
         </div>
-      </transition>
 
-      <file class="col-lg-2 col-md-3 col-sm-6"
-        v-for="file in files"
-        :key="file.id"
-        :file="file"
-        :canDrag="canEdit"
-        :canDelete="canDelete"
-        :panelClass="highlightIds.includes(file.id) ? 'success' : 'default'"
-        :icon="highlightIds.includes(file.id) ? 'check' : null"
-        @select="editFile(file)"
-        @delete="prepareToDelete(file)"
-      ></file>
+        <transition name="fade">
+          <div class="loader" v-if="loading">
+            <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
+            <span class="sr-only">Loading...</span>
+          </div>
+        </transition>
 
+        <file class="col-lg-2 col-md-3 col-sm-6"
+          v-for="file in files"
+          :key="file.id"
+          :file="file"
+          :canDrag="canEdit"
+          :canDelete="canDelete"
+          :cardClass="highlightIds.includes(file.id) ? 'success' : 'default'"
+          :icon="highlightIds.includes(file.id) ? 'check' : null"
+          @select="editFile(file)"
+          @delete="prepareToDelete(file)"
+        ></file>
+
+      </div>
     </div>
+
+    <pagination v-model="pagination" @input="changePage"></pagination>
   </div>
-
-  <pagination v-model="pagination" @input="changePage"></pagination>
 
 </div>
 </template>
@@ -524,7 +523,7 @@ export default {
   .p-5 {
     padding: 3em;
   }
-  .panel::after {
+  .card::after {
     content: '';
     position: absolute;
     top: 0;
@@ -555,12 +554,12 @@ export default {
     display: flex;
     flex-wrap: wrap;
   }
-  .panel {
+  .card {
     position: relative;
     overflow: hidden;
   }
   @supports(display: grid) {
-    .panel {
+    .card {
       height: 100%;
       margin-bottom: 0;
     }

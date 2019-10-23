@@ -4,8 +4,8 @@
     :class="file.type == 'image' && !failed ? 'is-image' : 'is-file'"
     :transfer-data="{type: 'file', file: file}"
   >
-    <div :class="['panel', `panel-${computedPanelClass}`]">
-      <div class="panel-image">
+    <div :class="['card', `card-${computedPanelClass}`]">
+      <div class="card-image">
         <button v-if="canDelete" class="btn btn-danger btn-sm delete-btn" title="Delete" @click.prevent="$emit('delete')">
           <i class="fa fa-trash"></i> Delete
         </button>
@@ -16,7 +16,7 @@
           </transition>
         </a>
       </div>
-      <div :class="[computedPanelClass === 'default' ? 'panel-footer' : 'panel-heading', 'text-center']">
+      <div :class="[computedPanelClass === 'default' ? 'card-footer' : 'card-heading', 'text-center']">
         <div v-if="file.type !== 'image'" class="document_block">
           <a class="btn btn-sm btn-default" :href="`/media/${file.type}/${file.filename}`" target="_blank">
             <i class="fa fa-download" aria-hidden="true"></i>
@@ -106,11 +106,11 @@ export default {
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
   opacity: 0;
 }
-  .panel-danger .icon {
+  .card-danger .icon {
     opacity: .1;
   }
-  .panel-heading,
-  .panel-footer {
+  .card-heading,
+  .card-footer {
     height: 100%;
   }
   .icon {
@@ -135,10 +135,10 @@ export default {
     padding: 1em;
     z-index: 1;
   }
-  .panel-image {
+  .card-image {
     position: relative;
   }
-  .is-file .panel-image {
+  .is-file .card-image {
     min-height: 8em;
   }
   .image {
