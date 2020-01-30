@@ -31,7 +31,7 @@
     "sass-loader": "^7.3.1",
     "stickytoolbar": "^2.0.2",
     "style-loader": "^1.0.0",
-    "tinymce": "^5.0.14",
+    "tinymce": "^5.1.4",
     "upath": "^1.2.0",
     "vue-drag-drop": "^1.1.4",
     "vue-multiselect": "^2.1.6",
