@@ -42,7 +42,7 @@ class BackpackMediaLibraryServiceProvider extends ServiceProvider
 
         // publish the migrations and seeds
         $this->publishes([__DIR__.'/../database/migrations/' => database_path('migrations')], 'migrations');
-        $this->publishes([__DIR__.'/../resources/js/dist/' => public_path('vendor/media-library/js/')], 'public');
+        $this->publishes([__DIR__.'/../resources/js/dist/' => public_path('packages/media-library/js/')], 'public');
         // publish translation files
         $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'media-library');
     }

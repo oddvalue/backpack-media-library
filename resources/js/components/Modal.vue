@@ -1,19 +1,19 @@
 <template>
   <div>
     <transition name="fade">
-      <div v-if="value" :class="{'modal-backdrop': true, 'fade': true, in: true}"></div>
+      <div v-if="value" :class="{'modal-backdrop': true, 'fade': true, 'show': true}"></div>
     </transition>
     <transition name="fade-down">
-      <div v-if="value" class="modal fade in" tabindex="-1" role="dialog" @click.stop.self="close" style="display: block">
+      <div v-if="value" class="modal fade show" tabindex="-1" role="dialog" @click.stop.self="close" style="display: block">
         <div :class="['modal-dialog', `modal-${size}`]" role="document">
           <div class="modal-content">
             <div class="modal-header">
-              <button type="button" class="close" @click.prevent="close">
-                <span>&times;</span>
-              </button>
               <slot name="header">
                 <h4 class="modal-title" v-if="title">{{title}}</h4>
               </slot>
+              <button type="button" class="close" aria-label="Close" @click.prevent="close">
+                <span aria-hidden="true">&times;</span>
+              </button>
             </div>
             <div class="modal-body">
               <slot></slot>

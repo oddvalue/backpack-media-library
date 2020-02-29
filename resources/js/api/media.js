@@ -16,7 +16,7 @@ export default {
     tags = [],
   } = {}, callback, errorCallback) {
     // try {
-      const data = await (await window.axios.get('/admin/media/' + type, {
+      const data = await (await window.axios.get('/admin/media-library/' + type, {
         params: {
           page: (page || ''),
           folder: (folderId || ''),
@@ -47,7 +47,7 @@ export default {
     }
 
     try {
-      const data = await (await window.axios.post('/admin/media/update/' + file.id, formData)).data;
+      const data = await (await window.axios.post('/admin/media-library/update/' + file.id, formData)).data;
       callback(data);
     } catch (error) {
       console.log(error); // eslint-disable-line

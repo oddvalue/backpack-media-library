@@ -2,13 +2,13 @@
 <div>
   <!-- File form -->
   <div v-if="canCreate">
-    <a :href="'/admin/media/upload' + (currentFolder ? `?folder=${currentFolder.id}` : '')" class="btn-success pull-right btn btn-sm new-btn">New Media <i class="fa fa-plus"></i></a>
-    <form id="new-folder-form" class="form-inline pull-right" style="clear:right;" action="#" method="#" @submit.prevent="newFolder">
+    <a :href="'/admin/media-library/create' + (currentFolder ? `?folder=${currentFolder.id}` : '')" class="btn btn-primary float-right new-btn">New Media <i class="fa fa-plus"></i></a>
+    <form id="new-folder-form" class="form-inline float-right" style="clear:right;" action="#" method="#" @submit.prevent="newFolder">
       <label for="new_folder">New Folder</label>
       <div class="input-group">
         <input class="form-control input-sm" type="text" id="new_folder" name="name" placeholder="Folder name" v-model="folderName" required>
-        <div class="input-group-btn">
-          <button type="submit" class="btn btn-primary btn-sm">
+        <div class="input-group-append">
+          <button type="submit" class="btn btn-default btn-sm">
             Add new folder
           </button>
         </div>
@@ -16,10 +16,9 @@
     </form>
   </div>
 
-
   <!-- Confirm -->
   <modal title="Are you sure?" v-model="showConfirm" @close="cancelDeleting()" size="sm">
-    <p>Are you sure you want to continue?</p>
+    <p>Are you sure you want to delete this?</p>
 
     <template v-slot:footer>
       <button class="btn btn-primary" @click="deleteFile()">
@@ -29,7 +28,7 @@
   </modal>
 
   <!-- Main -->
-  <div class="container-fluid" style="margin-bottom: 1em">
+  <div class="container-fluid mb-2">
     <div class="form-inline">
       <div class="form-group">
         <label for="search">Search</label>
@@ -81,12 +80,12 @@
       </a>
     </li>
   </ul>
-  <div class="tab-content">
+  <div class="tab-content mb-4">
     <pagination v-model="pagination" @input="changePage"></pagination>
 
-    <div class="tabs-details">
+    <div class="tabs-details p-3">
       <div class="text-center tiles">
-      <div class="col-lg-2 col-md-3 col-sm-6" v-if="currentFolder" v-cloak>
+      <div class="" v-if="currentFolder" v-cloak>
         <drop
           @drop="moveIntoFolder({ id: currentFolder.parent_id }, ...arguments)"
           @dragover="upFolderOver = true"
@@ -98,12 +97,14 @@
           <a class="text-center center-block" style="font-size: 4em" @click="upFolder(currentFolder)">
             <i class="fa fa-arrow-left"></i>
           </a>
-          « Back
+          <div @click="upFolder(currentFolder)">
+            Back
+          </div>
           </div>
         </div>
         </drop>
       </div>
-      <div class="col-lg-2 col-md-3 col-sm-6" v-for="folder in folders" :key="folder.id" v-cloak>
+      <div class="" v-for="folder in folders" :key="folder.id" v-cloak>
         <drop
           @drop="moveIntoFolder(folder, ...arguments)"
           @dragover="folder.over = true"
@@ -131,7 +132,7 @@
       <hr>
       <div class="text-center tiles">
 
-        <div class="col-sm-12 col-md-4 col-md-offset-4 text-center p-5" v-if="pagination.total == 0" v-cloak>
+        <div class="text-center p-5" v-if="pagination.total == 0" v-cloak>
           <figure>
           <i class="fa fa-folder-open-o" style="font-size: 4em"></i>
           <figcaption>
@@ -149,7 +150,7 @@
           </div>
         </transition>
 
-        <file class="col-lg-2 col-md-3 col-sm-6"
+        <file class=""
           v-for="file in files"
           :key="file.id"
           :file="file"
@@ -311,7 +312,7 @@ export default {
         this.formData.append('parent_id', this.currentFolder.id);
       }
 
-      window.axios.post('/admin/media/folder/add', this.formData, {headers: {'Content-Type': 'multipart/form-data'}})
+      window.axios.post('/admin/media-library/folder', this.formData, {headers: {'Content-Type': 'multipart/form-data'}})
         .then(response => {
           this.folderName = '';
           this.showNotification('Folder created', true);
@@ -376,13 +377,15 @@ export default {
     deleteFile() {
       const config = {};
       if (this.deletingFolder.id) {
-        config.url = `/admin/media/folder/delete/${this.deletingFolder.id}`;
+          console.log(this.deletingFolder);
+
+        config.url = `/admin/media-library/folder/${this.deletingFolder.id}`;
         config.type = 'Folder';
       } else {
-        config.url = `/admin/media/delete/${this.deletingFile.id}`;
+        config.url = `/admin/media-library/${this.deletingFile.id}`;
         config.type = 'File';
       }
-      window.axios.post(config.url)
+      window.axios.delete(config.url)
         .then(response => {
           this.showNotification(`${config.type} deleted`, true);
           this.fetchFile(this.activeTab, this.pagination.current_page);
@@ -411,13 +414,14 @@ export default {
         alert('Folder name cannot be empty!');
         this.fetchFile(this.activeTab, this.pagination.current_page);
       } else {
-        let formData = new FormData();
+        let formData = new FormData;
+        formData.append('_method', 'PUT');
         formData.append('name', folder.name);
         if (folder.parent_id) {
           formData.append('parent_id', folder.parent_id);
         }
 
-        axios.post('/admin/media/folder/update/' + folder.id, formData)
+        axios.post('/admin/media-library/folder/' + folder.id, formData)
           .then(response => {
             if (response.data.success === true) {
               this.showNotification('Folder successfully updated', true, () => this.updateFolder(response.data.original));
@@ -565,11 +569,12 @@ export default {
     }
     .tiles {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
       grid-gap: 1em;
     }
     .tiles > * {
       width: 100%;
+      flex-basis: 100%;
       padding: 0;
     }
     .tiles::before,
