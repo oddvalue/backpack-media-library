@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="editFile.show" :class="{'modal-backdrop': true, 'fade': true, in: editFile.show}"></div>
+    <div v-if="editFile.show" :class="{'modal-backdrop': true, 'fade': true, show: editFile.show}"></div>
     <div :class="{modal: true, fade: true, in: editFile.show}" id="modal-edit-file" tabindex="-1" role="dialog" :style="{display: editFile.show ? 'block' : 'none'}">
     <div class="modal-dialog modal-lg" role="document">
       <div class="modal-content">

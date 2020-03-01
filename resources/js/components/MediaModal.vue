@@ -36,7 +36,7 @@
         <slick-item v-for="(file, index) in selectedFiles"
           :key="file.id"
           :index="index"
-          class="file-drop col-lg-2 col-md-3 col-sm-6"
+          class="file-drop"
         >
           <file
             :file="file"
@@ -49,7 +49,7 @@
             <input type="hidden" :name="name" v-model="file.id">
           </file>
         </slick-item>
-        <div class="col-lg-2 col-md-3 col-sm-6" v-if="selectedFiles.length<1">
+        <div class="" v-if="selectedFiles.length<1">
           <div class="panel panel-default">
             <div class="panel-body" style="font-size: 4em; text-align:center; color: silver">
               <i class="fa fa-picture-o"></i>

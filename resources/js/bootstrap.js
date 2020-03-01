@@ -12,8 +12,17 @@ window.axios.defaults.maxRedirects = 0;
 window.axios.interceptors.response.use((response) => {
     return response;
   }, (error) => {
-    if (error.response && error.response.status === 401) {
-      window.location.reload();
+    if (error.response) {
+        switch (error.response.status) {
+            case 401:
+            case 403:
+            case 419:
+                window.location.reload();
+                break;
+
+            default:
+                return Promise.reject(error);
+        }
     } else {
       return Promise.reject(error);
     }

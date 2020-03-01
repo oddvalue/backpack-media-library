@@ -4,6 +4,7 @@ namespace Oddvalue\BackpackMediaLibrary\Http\Controllers;
 
 use Illuminate\Routing\Controller;
 use Oddvalue\BackpackMediaLibrary\Media;
+use Oddvalue\BackpackMediaLibrary\Uploader;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Symfony\Component\HttpFoundation\Request;
 use Oddvalue\BackpackMediaLibrary\MediaFolder;
@@ -17,6 +18,26 @@ class MediaLibraryCrudController extends Controller
     // use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
     // use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
     // use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
+
+    private $image_ext = ['jpg', 'jpeg', 'png', 'gif'];
+    private $audio_ext = ['mp3', 'ogg', 'mpga'];
+    private $video_ext = ['mp4', 'mpeg'];
+    private $document_ext = [
+        'doc',
+        'docx',
+        'pdf',
+        'odt',
+        'xls',
+        'xlsx',
+        'csv',
+        'ppt',
+        'pptx',
+        'xml',
+        'zip',
+        'tar',
+        'txt',
+        'rtf',
+    ];
 
     public function index()
     {
@@ -36,8 +57,6 @@ class MediaLibraryCrudController extends Controller
         $max_size = (int)ini_get('upload_max_filesize') * 1000;
         $all_ext = implode(',', $this->allExtensions());
 
-        debug($request->all());
-
         $this->validate($request, [
             'name' => 'required',
             'file' => 'required|file|mimes:' . $all_ext . '|max:' . $max_size,
@@ -51,7 +70,7 @@ class MediaLibraryCrudController extends Controller
 
         $file = $request->file('file');
 
-        app(\Bozboz\Admin\Services\Uploader::class)->upload($file, $instance, $request->input('name'));
+        app(Uploader::class)->upload($file, $instance, $request->input('name'));
 
         if ($request->has('tags')) {
             $tags = collect($request->input('tags'))->map(function($value) {
@@ -65,6 +84,30 @@ class MediaLibraryCrudController extends Controller
         $instance->save();
 
         return $instance;
+    }
+
+    public function resize($mode, $size, $filename)
+    {
+        list($width, $height) = explode('x', $size.'x');
+        try {
+            $img = \Image::make(public_path("/media/image/{$filename}"));
+        } catch (NotReadableException $e) {
+            return abort(404);
+        }
+        if ($width || $height) {
+            $img->$mode($width ?: null, $height ?: null, function($constraint) {
+                $constraint->aspectRatio();
+            });
+        }
+        $folder = collect(explode('/', dirname(request()->path())))->reduce(function($path, $folder) {
+            $path .= "/$folder";
+            if (!is_dir($path)) {
+                mkdir($path, 0755);
+            }
+            return $path;
+        }, public_path());
+        $img->save("$folder/$filename");
+        return $img->response();
     }
 
     public function setupListOperation()
@@ -131,7 +174,7 @@ class MediaLibraryCrudController extends Controller
             }
             $folders = $query->get();
 
-            $query = $model::where('mime_type', $mime_type)
+            $query = $model::where('type', $mime_type)
                 ->with('tags')
                 ->orderBy('id', 'desc');
 
@@ -182,5 +225,14 @@ class MediaLibraryCrudController extends Controller
         return response()->json(
             Tag::orderBy('name')->get()
         );
+    }
+
+        /**
+     * Get all extensions
+     * @return array Extensions of all file types
+     */
+    private function allExtensions()
+    {
+        return array_merge($this->image_ext, $this->audio_ext, $this->video_ext, $this->document_ext);
     }
 }

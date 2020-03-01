@@ -28,6 +28,7 @@
                 :can-edit="true"
                 :can-delete="true"
             ></boz-media>
+            <edit-modal></edit-modal>
 
         </div><!-- /.box-body -->
 @endsection

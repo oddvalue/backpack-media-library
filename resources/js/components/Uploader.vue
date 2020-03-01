@@ -1,12 +1,10 @@
 <template>
 <div>
-  <h1 id="title" class="title" v-if="showTitle">Upload</h1>
-
   <div v-show="$refs.upload && $refs.upload.dropActive" class="drop-active">
 		<h3>Drop files to upload</h3>
   </div>
   <div class="upload">
-    <div class="table-responsive">
+    <div class="table-/responsive bg-white">
       <table class="table table-hover">
         <thead>
           <tr>
@@ -56,7 +54,7 @@
                   <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu">
-                  <li><a class="dropdown-item" v-if="!file.active && !file.success && file.error !== 'compressing'" href="#" @click.prevent="file.active || file.success || file.error === 'compressing' ? false :  onEditFileShow(file)">Edit</a></li>
+                  <li><a class="dropdown-item" v-if="!file.active && !file.success && file.error !== 'compressing'" href="#" @click.prevent="onEditFileShow(file)">Edit</a></li>
                   <li><a class="dropdown-item" v-if="file.active" href="#" @click.prevent="file.active ? $refs.upload.update(file, {error: 'cancel'}) : false">Cancel</a></li>
 
                   <li v-if="file.active" @click.prevent="$refs.upload.update(file, {active: false})">
@@ -261,7 +259,7 @@ export default {
       }
 
       try {
-        const response = await (await axios.post('/admin/media/upload', formData)).data;
+        const response = await (await axios.post('/admin/media-library', formData)).data;
         this.$emit('uploaded', response);
         return response;
       } catch (error) {
