@@ -7,7 +7,7 @@
       <div v-if="value" class="modal fade show" tabindex="-1" role="dialog" @click.stop.self="close" style="display: block">
         <div :class="['modal-dialog', `modal-${size}`]" role="document">
           <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header bg-light">
               <slot name="header">
                 <h4 class="modal-title" v-if="title">{{title}}</h4>
               </slot>

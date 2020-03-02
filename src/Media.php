@@ -50,10 +50,10 @@ class Media extends Model
     public static function forModel(Eloquent $model, $foreignKey = null)
     {
         if ($foreignKey) {
-            return $model->belongsTo(get_class(), $foreignKey);
+            return $model->belongsTo(static::class, $foreignKey);
         }
 
-        return $model->morphToMany(get_class(), 'mediable')->orderBy('sorting');
+        return $model->morphMany(static::class, 'mediable')->orderBy('sorting');
     }
 
     /**

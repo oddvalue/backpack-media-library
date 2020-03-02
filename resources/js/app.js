@@ -4,8 +4,8 @@ import Vue from 'vue';
 import Toasted from 'vue-toasted';
 // import { loadProgressBar } from 'axios-progress-bar';
 
-import BozUploader from './components/Uploader';
-import BozMedia from './components/MediaBrowser';
+import MediaUploader from './components/Uploader';
+import MediaBrowser from './components/MediaBrowser';
 import MediaModal from './components/MediaModal';
 import EditModal from './components/EditModal';
 import TinymceEditor from './components/TinymceEditor';
@@ -42,12 +42,16 @@ Vue.filter('formatSize', function (size) {
   return size.toString() + ' B'
 });
 
+if (! document.getElementById('app')) {
+    document.querySelector('main').id = 'app';
+}
+
 new Vue({
   el: '#app',
   store,
   components: {
-    BozUploader,
-    BozMedia,
+    MediaUploader,
+    MediaBrowser,
     MediaModal,
     EditModal,
     TinymceEditor,

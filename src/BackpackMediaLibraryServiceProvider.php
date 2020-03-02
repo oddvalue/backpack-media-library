@@ -35,9 +35,9 @@ class BackpackMediaLibraryServiceProvider extends ServiceProvider
                 __DIR__.'/../config/config.php' => config_path('media-library.php'),
             ], 'config');
             $this->loadViewsFrom(__DIR__.'/../resources/views', 'media-library');
-            $this->publishes([
-                __DIR__.'/../resources/views' => base_path('resources/views/vendor/media-library'),
-            ], 'views');
+            // $this->publishes([
+            //     __DIR__.'/../resources/views' => base_path('resources/views/vendor/media-library'),
+            // ], 'views');
         }
 
         // publish the migrations and seeds

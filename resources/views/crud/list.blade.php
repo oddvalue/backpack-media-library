@@ -8,10 +8,10 @@
 @endphp
 
 @section('header')
-  <div class="container-fluid">
-    <h2>
+  <div class="container-fluid mb-3">
+    <h1>
       <span class="text-capitalize">Media Library</span>
-    </h2>
+    </h1>
   </div>
 @endsection
 
@@ -23,11 +23,11 @@
 
         <div class="overflow-hidden mt-2" id="app">
 
-            <boz-media
+            <media-browser
                 :can-create="true"
                 :can-edit="true"
                 :can-delete="true"
-            ></boz-media>
+            ></media-browser>
             <edit-modal></edit-modal>
 
         </div><!-- /.box-body -->

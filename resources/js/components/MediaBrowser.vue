@@ -4,7 +4,7 @@
   <div v-if="canCreate">
     <a :href="'/admin/media-library/create' + (currentFolder ? `?folder=${currentFolder.id}` : '')" class="btn btn-primary float-right new-btn">New Media <i class="fa fa-plus"></i></a>
     <form id="new-folder-form" class="form-inline float-right" style="clear:right;" action="#" method="#" @submit.prevent="newFolder">
-      <label for="new_folder">New Folder</label>
+      <label for="new_folder" class="sr-only">New Folder</label>
       <div class="input-group">
         <input class="form-control input-sm" type="text" id="new_folder" name="name" placeholder="Folder name" v-model="folderName" required>
         <div class="input-group-append">
@@ -28,20 +28,20 @@
   </modal>
 
   <!-- Main -->
-  <div class="container-fluid mb-2">
+  <div class="container-fluid mb-4">
     <div class="form-inline">
       <div class="form-group">
         <label for="search">Search</label>
-        <div class="input-group">
+        <div class="input-group mx-sm-3">
           <input name="search" v-model="searchString" @input="pagination.current_page = 1" type="text" id="search" class="form-control input-sm">
-          <div class="input-group-btn">
+          <div class="input-group-append">
             <input v-if="searchString" @click.prevent="searchString = ''" type="button" value="×" class="btn btn-sm btn-default">
           </div>
         </div>
       </div>
       <div class="form-group">
         <label for="tags">Tags</label>
-        <div class="input-group" style="min-width: 6em">
+        <div class="input-group mx-sm-3" style="min-width: 6em">
           <multiselect
             v-model="tagFilter"
             placeholder=""
@@ -62,7 +62,7 @@
       <a role="tab" :class="{'nav-link': true, 'active': isActive('image')}" href="#">
         <span class="icon is-small"><i class="fa fa-image"></i></span>
         Pictures
-        <span class="badge badge-pill badge-default">29</span>
+        <span class="badge badge-pill badge-default">{{imageCount}}</span>
       </a>
     </li>
     <li role="presentation" class="nav-item" @click="getFiles('pdf')">
@@ -251,7 +251,10 @@ export default {
     }),
     highlightIds() {
       return this.highlightFiles.map(file => file.id);
-    }
+    },
+    imageCount() {
+        return this.files.length;
+    },
   },
 
   watch: {
@@ -563,13 +566,13 @@ export default {
     overflow: hidden;
   }
   @supports(display: grid) {
-    .card {
+    .tiles .card {
       height: 100%;
       margin-bottom: 0;
     }
     .tiles {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
       grid-gap: 1em;
     }
     .tiles > * {

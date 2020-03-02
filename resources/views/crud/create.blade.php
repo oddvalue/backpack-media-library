@@ -9,20 +9,20 @@
 @endphp
 
 @section('header')
-  <div class="container-fluid">
-    <h2>
+  <div class="container-fluid mb-3">
+    <h1>
       <span class="text-capitalize">Media Library</span>
       <small>Upload media</small>
       <small><a href="{{backpack_url('media-library')}}" class="hidden-print font-sm"><i class="fa fa-angle-double-left"></i> Back to all  <span>Media</span></a></small>
-    </h2>
+    </h1>
   </div>
 @endsection
 
 @section('content')
 <main id="app">
-    <boz-uploader
+    <media-uploader
         {{ request()->input('folder') ? ':default-folder="'.request()->input('folder').'"' : '' }}
-    ></boz-uploader>
+    ></media-uploader>
     <edit-modal></edit-modal>
 </main>
 @stop

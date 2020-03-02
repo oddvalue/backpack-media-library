@@ -2,15 +2,15 @@
   <div>
     <modal v-model="modalIsShown" @close="showModal = false; $emit('close')" cancelText="Close" size="lg">
       <template v-slot:header>
-        <ul class="nav nav-tabs" role="tablist">
-          <li role="presentation" :class="{'active': tab === 'upload'}" @click="tab = 'upload'">
-            <a role="tab">
+        <ul class="nav nav-tabs card-header-tabs" role="tablist">
+          <li role="presentation" @click="tab = 'upload'" class="nav-item">
+            <a role="tab" :class="{'active': tab === 'upload', 'nav-link': true, 'text-primary': tab !== 'upload'}">
               <span class="icon is-small"><i class="fa fa-upload"></i></span>
               <span>Upload</span>
             </a>
           </li>
-          <li role="presentation" :class="{'active': tab === 'browse'}" @click="tab = 'browse'">
-            <a role="tab">
+          <li role="presentation" @click="tab = 'browse'" class="nav-item">
+            <a role="tab" :class="{'active': tab === 'browse', 'nav-link': true, 'text-primary': tab !== 'browse'}">
               <span class="icon is-small"><i class="fa fa-folder-open"></i></span>
               <span>Browse</span>
             </a>
@@ -50,8 +50,8 @@
           </file>
         </slick-item>
         <div class="" v-if="selectedFiles.length<1">
-          <div class="panel panel-default">
-            <div class="panel-body" style="font-size: 4em; text-align:center; color: silver">
+          <div class="card bg-light">
+            <div class="card-body text-secondary" style="font-size: 4em; text-align:center">
               <i class="fa fa-picture-o"></i>
             </div>
           </div>
@@ -254,9 +254,7 @@ export default {
     height: 100%;
   }
   .nav-tabs {
-    position: relative;
-    bottom: -15px;
-    border: 0;
+    margin-bottom: -1rem;
   }
 
   .tiles {
@@ -267,7 +265,7 @@ export default {
   @supports(display: grid) {
     .tiles {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
     }
     .tiles > * {
       width: 100%;

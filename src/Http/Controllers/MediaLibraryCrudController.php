@@ -3,6 +3,7 @@
 namespace Oddvalue\BackpackMediaLibrary\Http\Controllers;
 
 use Illuminate\Routing\Controller;
+use Oddvalue\BackpackMediaLibrary\Tag;
 use Oddvalue\BackpackMediaLibrary\Media;
 use Oddvalue\BackpackMediaLibrary\Uploader;
 use Illuminate\Foundation\Bus\DispatchesJobs;
@@ -84,6 +85,20 @@ class MediaLibraryCrudController extends Controller
         $instance->save();
 
         return $instance;
+    }
+
+    /**
+     * Delete file from disk and database
+     * @param  integer $id  Media Id
+     * @return boolean      True if success, otherwise - false
+     */
+    public function destroy($id)
+    {
+        // if (!$this->canDestroy()) {
+        //     return abort(403);
+        // }
+        $file = Media::findOrFail($id);
+        return response()->json($file->delete());
     }
 
     public function resize($mode, $size, $filename)
