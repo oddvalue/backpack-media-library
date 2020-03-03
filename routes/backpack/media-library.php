@@ -13,9 +13,10 @@ Route::group([
     'prefix'     => config('backpack.base.route_prefix', 'admin'),
     'middleware' => ['web', backpack_middleware()],
 ], function () {
+    Route::get('media-library/folder/options', 'FolderCrudController@getDropdownOptions');
+    Route::get('media-library/tags', 'MediaLibraryCrudController@getTags');
     Route::resource('media-library/folder', 'FolderCrudController', ['except' => ['show', 'index']]);
     Route::resource('media-library', 'MediaLibraryCrudController', ['except' => ['show']]);
-    Route::get('media/tags', 'MediaLibraryCrudController@getTags');
     Route::get('media-library/{type}', 'MediaLibraryCrudController@getList');
 });
 Route::get('media/image/{mode}/{size}/{filename}', 'Oddvalue\BackpackMediaLibrary\Http\Controllers\MediaLibraryCrudController@resize')

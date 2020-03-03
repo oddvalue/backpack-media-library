@@ -168,8 +168,8 @@ export default {
     }
   },
   mounted() {
-    window.axios.get('/admin/media/tags').then(response => this.options.tags = response.data);
-    window.axios.get('/admin/media/folder/options').then(response => this.options.folders = response.data);
+    window.axios.get('/admin/media-library/tags').then(response => this.options.tags = response.data);
+    window.axios.get('/admin/media-library/folder/options').then(response => this.options.folders = response.data);
   },
   methods: {
     onEditorFile() {

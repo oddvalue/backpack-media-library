@@ -20,7 +20,18 @@ class MediaBrowserField extends Field
 
     public function calculateName()
     {
-        return "media_relations[{$this->result['name']}][]";
+        return "media_relations[{$this->result['name']}]";
+    }
+
+    public function getValue()
+    {
+        if (!$this->offsetExists('value') || !$this->offsetGet('value')) {
+            return null;
+        }
+        if ($this->offsetGet('is_many')) {
+            return $this->offsetGet('value');
+        }
+        return [$this->offsetGet('value')];
     }
 
     public function name(string $value) : MediaBrowserField

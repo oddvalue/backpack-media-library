@@ -10,9 +10,9 @@
     <div class="controls">
         <media-modal
             {{-- id="{{$id}}" --}}
-            name="{{ $field->calculateName() }}"
+            name="{{ $field->calculateName() }}[]"
             :is-many-relation="{{ $field['is_many'] ? 'true' : 'false' }}"
-            :data='{"media": []}'
+            :data='{{ json_encode(old(square_brackets_to_dots($field->calculateName())) ?? $field->getValue() ?? $field['default'] ?? []) }}'
         ></media-modal>
 
     </div>

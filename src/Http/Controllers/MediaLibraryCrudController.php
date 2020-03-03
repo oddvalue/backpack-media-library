@@ -233,7 +233,6 @@ class MediaLibraryCrudController extends Controller
 
     public function getTags()
     {
-        return response()->json([]);
         // if (!$this->canView()) {
         //     return abort(403);
         // }

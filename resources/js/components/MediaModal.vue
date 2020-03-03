@@ -88,7 +88,6 @@
 
 <script>
 import { SlickList, SlickItem } from 'vue-slicksort';
-import { setTimeout } from 'timers';
 import Modal from './Modal';
 import MediaBrowser from './MediaBrowser';
 import Uploader from './Uploader';
@@ -111,10 +110,8 @@ export default {
       default: false,
     },
     data: {
-      type: Object,
-      default: () => ({
-        media: [],
-      }),
+      type: Array,
+      default: () => [],
     },
     name: {
       type: String,
@@ -225,7 +222,7 @@ export default {
     },
   },
   mounted() {
-    this.selectedFiles = this.data.media;
+    this.selectedFiles = this.data;
     this.selectedFiles.map(file => file.over = false);
   }
 };

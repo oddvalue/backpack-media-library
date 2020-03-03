@@ -62,21 +62,21 @@
       <a role="tab" :class="{'nav-link': true, 'active': isActive('image')}" href="#">
         <span class="icon is-small"><i class="fa fa-image"></i></span>
         Pictures
-        <span class="badge badge-pill badge-default">{{imageCount}}</span>
+        <!-- <span class="badge badge-pill badge-default">{{imageCount}}</span> -->
       </a>
     </li>
     <li role="presentation" class="nav-item" @click="getFiles('pdf')">
       <a role="tab" :class="{'nav-link': true, 'active': isActive('pdf')}" href="#">
         <span class="icon is-small"><i class="fa fa-file-text-o"></i></span>
         PDF
-        <span class="badge badge-pill badge-default">29</span>
+        <!-- <span class="badge badge-pill badge-default">29</span> -->
       </a>
     </li>
     <li role="presentation" class="nav-item" @click="getFiles('misc')">
       <a role="tab" :class="{'nav-link': true, 'active': isActive('misc')}" href="#">
         <span class="icon is-small"><i class="fa fa-file"></i></span>
         Misc
-        <span class="badge badge-pill badge-default">29</span>
+        <!-- <span class="badge badge-pill badge-default">29</span> -->
       </a>
     </li>
   </ul>
@@ -508,7 +508,7 @@ export default {
 
   mounted() {
     this.fetchFile(this.activeTab, this.pagination.current_page);
-    window.axios.get('/admin/media/tags').then(response => this.tags = response.data);
+    window.axios.get('/admin/media-library/tags').then(response => this.tags = response.data);
   },
 
 }
