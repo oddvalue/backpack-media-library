@@ -4,10 +4,10 @@ All notable changes to `backpack-media-library` will be documented in this file.
 
 Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) principles.
 
-## NEXT - YYYY-MM-DD
+## v1.0.0 - Future
 
 ### Added
-- Nothing
+- The whole damn package
 
 ### Deprecated
 - Nothing

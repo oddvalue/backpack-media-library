@@ -7,23 +7,13 @@
 [![Quality Score][ico-code-quality]][link-code-quality]
 [![Total Downloads][ico-downloads]][link-downloads]
 
-This is where your description should go. Try and limit it to a paragraph or two, and maybe throw in a mention of what
-PSRs you support to avoid any confusion with users and contributors.
+Upload and manage you media in Backpack for Laravel v4.
 
-## Structure
+## Requirements
 
-If any of the following are applicable to your project, then the directory structure should follow industry best practices by being named the following.
-
-```
-bin/
-build/
-docs/
-config/
-src/
-tests/
-vendor/
-```
-
+- Laravel 6.x
+- Backpack 4.x
+- Tested with PHP 7.3 but may work below
 
 ## Install
 
@@ -33,11 +23,40 @@ Via Composer
 $ composer require oddvalue/backpack-media-library
 ```
 
+Publish and migrate
+
+```bash
+php artisan vendor:publish --provider "Oddvalue\BackpackMediaLibrary\BackpackMediaLibraryServiceProvider"
+php artisan migrate
+```
+
 ## Usage
 
-``` php
-$skeleton = new Oddvalue\BackpackMediaLibrary();
-echo $skeleton->echoPhrase('Hello, League!');
+First add the trait to the model you wish to attach media to:
+
+```php
+use Oddvalue\BackpackMediaLibrary\Traits\HasMedia;
+```
+
+Add relation methods to the model:
+
+```php
+public function gallery()
+{
+    return $this->hasManyMedia();
+}
+
+public function image()
+{
+    return $this->hasOneMedia();
+}
+```
+
+Finally add fields to your model's CRUD controller:
+
+```php
+$this->crud->addField(MediaBrowserField::make('gallery'));
+$this->crud->addField(MediaBrowserField::make('image')->single());
 ```
 
 ## Change log

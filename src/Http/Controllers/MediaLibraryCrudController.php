@@ -16,10 +16,6 @@ class MediaLibraryCrudController extends Controller
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
-    // use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
-    // use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
-    // use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
-
     private $image_ext = ['jpg', 'jpeg', 'png', 'gif'];
     private $audio_ext = ['mp3', 'ogg', 'mpga'];
     private $video_ext = ['mp4', 'mpeg'];
