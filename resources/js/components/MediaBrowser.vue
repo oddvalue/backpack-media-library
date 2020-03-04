@@ -173,7 +173,7 @@
 
 
 <script>
-import _ from 'lodash';
+import { throttle } from 'lodash';
 import Multiselect from 'vue-multiselect';
 import { mapState } from 'vuex';
 import { Drag, Drop } from 'vue-drag-drop';
@@ -280,7 +280,7 @@ export default {
       this.fetchFile(this.activeTab, pagination.current_page);
     },
 
-    throttledRefresh: _.throttle(function() {
+    throttledRefresh: throttle(function() {
       this.fetchFile(this.activeTab, this.pagination.current_page)
     }, 1000),
 

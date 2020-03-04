@@ -29,6 +29,7 @@ export default {
 
   async update(file, callback, errorCallback) {
     const formData = new FormData();
+    formData.append('_method', 'PUT');
     formData.append('caption', file.caption || '');
     if (file.file) {
       formData.set("file", file.file, file.name);
@@ -47,7 +48,7 @@ export default {
     }
 
     try {
-      const data = await (await window.axios.post('/admin/media-library/update/' + file.id, formData)).data;
+      const data = await (await window.axios.post('/admin/media-library/' + file.id, formData)).data;
       callback(data);
     } catch (error) {
       console.log(error); // eslint-disable-line

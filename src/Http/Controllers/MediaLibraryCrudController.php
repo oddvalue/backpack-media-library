@@ -84,6 +84,65 @@ class MediaLibraryCrudController extends Controller
     }
 
     /**
+     * Edit specific file
+     * @param  integer  $id      Media Id
+     * @param  Request $request  Request with form data: filename
+     * @return boolean           True if success, otherwise - false
+     */
+    public function update($id, Request $request)
+    {
+        // if (!$this->canEdit()) {
+        //     return abort(403);
+        // }
+        $instance = Media::findOrFail($id)->load('tags');
+
+        $max_size = (int)ini_get('upload_max_filesize') * 1000;
+        $all_ext = implode(',', $this->allExtensions());
+        dump($instance->caption);
+
+        $original = $instance->getOriginal();
+
+        $this->validate($request, [
+            'file' => 'file|max:' . $max_size . '|mimes:' . $all_ext,
+            'folder_id' => 'nullable|int|exists:media_folders,id',
+            'tags' => 'array',
+        ]);
+
+        $instance->caption = $request->input('caption');
+        $instance->folder_id = $request->input('folder_id') ?: null;
+        dump($instance->caption, $request->all());
+
+        if ($request->hasFile('file')) {
+            $file = $request->file('file');
+            try {
+                app(Uploader::class)->replace($file, $instance);
+            } catch (\Exception $e) {
+                return response()->json(new MessageBag(['file' => $e->getMessage()]), 422);
+            }
+        }
+
+        if ($request->has('tags')) {
+            $tags = collect($request->input('tags'))->filter(function ($tag) {
+                return !is_null($tag) && $tag !== '';
+            })->map(function ($value) {
+                return Tag::firstOrCreate([
+                    'name' => $value
+                ])->id;
+            });
+            $instance->tags()->sync($tags->all());
+        }
+
+        $instance->save();
+
+        dump($instance->caption);
+
+        return response()->json([
+            'success' => true,
+            'original' => $original,
+        ]);
+    }
+
+    /**
      * Delete file from disk and database
      * @param  integer $id  Media Id
      * @return boolean      True if success, otherwise - false
