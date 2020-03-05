@@ -70,7 +70,7 @@ class MediaLibraryCrudController extends Controller
         app(Uploader::class)->upload($file, $instance, $request->input('name'));
 
         if ($request->has('tags')) {
-            $tags = collect($request->input('tags'))->map(function($value) {
+            $tags = collect($request->input('tags'))->map(function ($value) {
                 return Tag::firstOrCreate([
                     'name' => $value
                 ])->id;
@@ -165,11 +165,11 @@ class MediaLibraryCrudController extends Controller
             return abort(404);
         }
         if ($width || $height) {
-            $img->$mode($width ?: null, $height ?: null, function($constraint) {
+            $img->$mode($width ?: null, $height ?: null, function ($constraint) {
                 $constraint->aspectRatio();
             });
         }
-        $folder = collect(explode('/', dirname(request()->path())))->reduce(function($path, $folder) {
+        $folder = collect(explode('/', dirname(request()->path())))->reduce(function ($path, $folder) {
             $path .= "/$folder";
             if (!is_dir($path)) {
                 mkdir($path, 0755);
@@ -262,7 +262,7 @@ class MediaLibraryCrudController extends Controller
             }
 
             if (request()->input('tags')) {
-                $query->whereHas('tags', function($query) {
+                $query->whereHas('tags', function ($query) {
                     $query->whereIn('name', request()->input('tags'));
                 });
             }
