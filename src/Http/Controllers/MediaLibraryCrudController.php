@@ -98,7 +98,6 @@ class MediaLibraryCrudController extends Controller
 
         $max_size = (int)ini_get('upload_max_filesize') * 1000;
         $all_ext = implode(',', $this->allExtensions());
-        dump($instance->caption);
 
         $original = $instance->getOriginal();
 
@@ -110,7 +109,6 @@ class MediaLibraryCrudController extends Controller
 
         $instance->caption = $request->input('caption');
         $instance->folder_id = $request->input('folder_id') ?: null;
-        dump($instance->caption, $request->all());
 
         if ($request->hasFile('file')) {
             $file = $request->file('file');
@@ -133,8 +131,6 @@ class MediaLibraryCrudController extends Controller
         }
 
         $instance->save();
-
-        dump($instance->caption);
 
         return response()->json([
             'success' => true,
