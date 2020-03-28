@@ -45,8 +45,7 @@ class Uploader
 
         $instance->filename = $this->generateUniqueFilename(
             $filename ?: $uploadedFile->getClientOriginalName(),
-            $uploadedFile->getClientOriginalExtension(),
-            $instance->id
+            $uploadedFile->getClientOriginalExtension()
         );
 
         $instance->disk = 'local';
@@ -110,8 +109,7 @@ class Uploader
 
         $instance->filename = $this->generateUniqueFilename(
             $externalFile->getBasename(),
-            $externalFile->getExtension(),
-            $instance->id
+            $externalFile->getExtension()
         );
 
         $tempFile = new File($temporaryPath);
@@ -126,10 +124,9 @@ class Uploader
      *
      * @param  string  $name
      * @param  string  $extension
-     * @param  string  $uniqueString
      * @return string
      */
-    protected function generateUniqueFilename($name, $extension, $uniqueString)
+    protected function generateUniqueFilename($name, $extension)
     {
         if ($extension) {
             $filenameWithoutExtension = str_replace('.' . $extension, '', $name);
@@ -137,7 +134,14 @@ class Uploader
             @list($filenameWithoutExtension, $extension) = preg_split('/\.(?=[^\.]*$)/', $name);
         }
 
-        return Str::slug($filenameWithoutExtension) . '-' . $uniqueString . '.' . $extension;
+        $suffix = '';
+
+        do {
+            $filename = Str::slug($filenameWithoutExtension) . ($suffix--) . '.' . $extension;
+        } while (Media::where('filename', $filename)->exists());
+
+
+        return $filename;
     }
 
     /**
