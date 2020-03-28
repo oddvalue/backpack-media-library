@@ -41,8 +41,7 @@ class FolderCrudController extends Controller
         if (! $model) {
             return response()->json(false);
         }
-        print_r($request->all());
-dump($request->all(), 'required|unique:media_folders,name,'.$id.',id,parent_id,'.($request->input('parent_id') ?: 'NULL'));
+
         $this->validate($request, [
             'name' => 'required|unique:media_folders,name,'.$id.',id,parent_id,'.($request->input('parent_id') ?: 'NULL'),
             'parent_id' => 'int|exists:media_folders,id',

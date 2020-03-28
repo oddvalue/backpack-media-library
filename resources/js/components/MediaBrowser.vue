@@ -380,8 +380,6 @@ export default {
     deleteFile() {
       const config = {};
       if (this.deletingFolder.id) {
-          console.log(this.deletingFolder);
-
         config.url = `/admin/media-library/folder/${this.deletingFolder.id}`;
         config.type = 'Folder';
       } else {

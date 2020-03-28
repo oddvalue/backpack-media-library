@@ -16,8 +16,7 @@ Route::group([
     Route::get('media-library/folder/options', 'FolderCrudController@getDropdownOptions');
     Route::get('media-library/tags', 'MediaLibraryCrudController@getTags');
     Route::resource('media-library/folder', 'FolderCrudController', ['except' => ['show', 'index']]);
-    Route::resource('media-library', 'MediaLibraryCrudController', ['except' => ['show']]);
-    Route::get('media-library/{type}', 'MediaLibraryCrudController@getList');
+    Route::resource('media-library', 'MediaLibraryCrudController');
 });
 Route::get('media/image/{mode}/{size}/{filename}', 'Oddvalue\BackpackMediaLibrary\Http\Controllers\MediaLibraryCrudController@resize')
     ->name('media-library.resize')

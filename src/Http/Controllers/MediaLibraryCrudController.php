@@ -36,14 +36,22 @@ class MediaLibraryCrudController extends Controller
         'rtf',
     ];
 
-    public function index()
+    public function index(Request $request)
     {
+        if (request()->wantsJson()) {
+            return $this->getList($request->input('type'));
+        }
         return view('media-library::crud.list');
     }
 
     public function create()
     {
         return view('media-library::crud.create');
+    }
+
+    public function show(Media $media)
+    {
+        return $media;
     }
 
     public function store(Request $request)
@@ -238,7 +246,7 @@ class MediaLibraryCrudController extends Controller
                     $query->whereNull('parent_id');
                 }
             }
-            $folders = $query->get();
+            $folders = $query->get()->sortBy('name', SORT_NATURAL)->values();
 
             $query = $model::where('type', $mime_type)
                 ->with('tags')

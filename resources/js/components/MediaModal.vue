@@ -1,5 +1,6 @@
 <template>
   <div>
+    <input type="hidden" :name="name">
     <modal v-model="modalIsShown" @close="showModal = false; $emit('close')" cancelText="Close" size="lg">
       <template v-slot:header>
         <ul class="nav nav-tabs card-header-tabs" role="tablist">
@@ -220,10 +221,21 @@ export default {
         icon: success ? 'check' : 'exclamation-triangle',
       });
     },
+    prepareData(data) {
+      this.selectedFiles = data.map(file => {
+          if (Number.isInteger(file)) {
+            return this.getMedia(file);
+          }
+          return file;
+      });
+      this.selectedFiles.map(file => file.over = false);
+    },
+    async getFile(id) {
+      return await (await window.axios.get('/admin/media-library/' + id)).data;
+    },
   },
   mounted() {
-    this.selectedFiles = this.data;
-    this.selectedFiles.map(file => file.over = false);
+    this.prepareData(this.data);
   }
 };
 </script>

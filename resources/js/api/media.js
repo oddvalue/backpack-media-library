@@ -16,12 +16,13 @@ export default {
     tags = [],
   } = {}, callback, errorCallback) {
     // try {
-      const data = await (await window.axios.get('/admin/media-library/' + type, {
+      const data = await (await window.axios.get('/admin/media-library', {
         params: {
           page: (page || ''),
           folder: (folderId || ''),
           search: (search && search.length >= 1 ? search : null),
           tags: tags,
+          type: type,
         },
       })).data;
       callback(data);

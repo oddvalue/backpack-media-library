@@ -11,6 +11,10 @@ class MediaFolder extends Model
         'parent_id',
     ];
 
+    protected $with = [
+        'children',
+    ];
+
     public function parent()
     {
         return $this->belongsTo(MediaFolder::class);

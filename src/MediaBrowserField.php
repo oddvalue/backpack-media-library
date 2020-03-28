@@ -2,6 +2,7 @@
 
 namespace Oddvalue\BackpackMediaLibrary;
 
+use Illuminate\Support\Arr;
 use SergeYugai\Laravel\Backpack\FieldsAsClasses\Fields\Field;
 
 class MediaBrowserField extends Field
@@ -28,10 +29,18 @@ class MediaBrowserField extends Field
         if (!$this->offsetExists('value') || !$this->offsetGet('value')) {
             return null;
         }
-        if ($this->offsetGet('is_many')) {
-            return $this->offsetGet('value');
+
+        $value = $this->offsetGet('value');
+
+        if (! $this->offsetGet('is_many')) {
+            $value = [$value];
         }
-        return [$this->offsetGet('value')];
+
+        if (is_object(Arr::first($value))) {
+            $value = collect($value)->pluck('id')->all();
+        }
+
+        return $value;
     }
 
     public function name(string $value) : MediaBrowserField
@@ -50,5 +59,16 @@ class MediaBrowserField extends Field
     {
         $this->offsetSet('is_many', !$value);
         return $this;
+    }
+
+    public function offsetGet($key)
+    {
+        switch ($key) {
+            case 'fake';
+                return false;
+
+            default:
+                return parent::offsetGet($key);
+        }
     }
 }
