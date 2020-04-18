@@ -2,7 +2,7 @@
 <div>
   <!-- File form -->
   <div v-if="canCreate">
-    <a :href="'/admin/media-library/create' + (currentFolder ? `?folder=${currentFolder.id}` : '')" class="btn btn-primary float-right new-btn">New Media <i class="fa fa-plus"></i></a>
+    <a :href="'/admin/media-library/create' + (currentFolder ? `?folder=${currentFolder.id}` : '')" class="btn btn-primary float-right new-btn">Upload Media <i class="fa fa-plus"></i></a>
     <form id="new-folder-form" class="form-inline float-right" style="clear:right;" action="#" method="#" @submit.prevent="newFolder">
       <label for="new_folder" class="sr-only">New Folder</label>
       <div class="input-group">

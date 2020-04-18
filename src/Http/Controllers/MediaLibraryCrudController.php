@@ -51,7 +51,7 @@ class MediaLibraryCrudController extends Controller
 
     public function show(Media $media)
     {
-        return $media;
+        return response()->json($media);
     }
 
     public function store(Request $request)

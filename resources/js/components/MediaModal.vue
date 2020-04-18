@@ -47,7 +47,7 @@
             @delete="deselectFile(file)"
             @select="editFile(file)"
           >
-            <input type="hidden" :name="name" v-model="file.id">
+            <input type="hidden" :name="`${name}[]`" v-model="file.id">
           </file>
         </slick-item>
         <div class="" v-if="selectedFiles.length<1">
@@ -94,6 +94,7 @@ import MediaBrowser from './MediaBrowser';
 import Uploader from './Uploader';
 import File from './File';
 import EditModal from './EditModal';
+import mediaApi from '../api/media';
 
 export default {
   components: {
@@ -222,16 +223,18 @@ export default {
       });
     },
     prepareData(data) {
-      this.selectedFiles = data.map(file => {
-          if (Number.isInteger(file)) {
-            return this.getMedia(file);
+        data.map(file => {
+          if (Number.isInteger(parseInt(file))) {
+            file = mediaApi.get(file, this.selectFile);
+          } else {
+              this.selectFile(file);
           }
-          return file;
       });
-      this.selectedFiles.map(file => file.over = false);
     },
     async getFile(id) {
-      return await (await window.axios.get('/admin/media-library/' + id)).data;
+      const response = await window.axios.get('/admin/media-library/' + id);
+      const { data } = response.data;
+      return data;
     },
   },
   mounted() {

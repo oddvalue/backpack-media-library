@@ -10,7 +10,6 @@ class MediaBrowserField extends Field
     protected $result = [
         'type' => 'media-browser',
         'view_namespace' => 'media-library::crud.fields',
-        'isManyRelation' => false,
         'is_many' => true,
     ];
 

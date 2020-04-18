@@ -3,30 +3,41 @@ export default {
    * Get the paginated listing of media and folders
    *
    * @param {
-   *   type: String 'image|pdf|misc'
-   *   page: Int
-   *   folderId: Int
-   * } options
-   */
-  async index({
-    type = 'image',
-    page = 1,
-    folderId = null,
-    search = null,
-    tags = [],
-  } = {}, callback, errorCallback) {
-    // try {
-      const data = await (await window.axios.get('/admin/media-library', {
-        params: {
-          page: (page || ''),
-          folder: (folderId || ''),
-          search: (search && search.length >= 1 ? search : null),
-          tags: tags,
-          type: type,
-        },
-      })).data;
-      callback(data);
+    *   type: String 'image|pdf|misc'
+    *   page: Int
+    *   folderId: Int
+    * } options
+    */
+   async index({
+     type = 'image',
+     page = 1,
+     folderId = null,
+     search = null,
+     tags = [],
+   } = {}, callback, errorCallback) {
+     // try {
+       const data = await (await window.axios.get('/admin/media-library', {
+         params: {
+           page: (page || ''),
+           folder: (folderId || ''),
+           search: (search && search.length >= 1 ? search : null),
+           tags: tags,
+           type: type,
+         },
+       })).data;
+       callback(data);
   },
+
+  /**
+   * Get a single media instance
+   *
+   * @param Int options
+   */
+   async get(id, callback, errorCallback) {
+       const data = await (await window.axios.get(`/admin/media-library/${id}`)).data;
+       callback(data);
+       return data;
+   },
 
   async update(file, callback, errorCallback) {
     const formData = new FormData();
