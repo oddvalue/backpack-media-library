@@ -48,6 +48,8 @@ class CreateMediaTables extends Migration
                 ->references('id')
                 ->on('media')
                 ->onDelete('cascade');
+
+            $table->primary(['media_id', 'mediable_id', 'mediable_type', 'collection']);
         });
 
         Schema::create('media_tags', function (Blueprint $table) {
