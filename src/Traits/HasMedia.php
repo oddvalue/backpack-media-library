@@ -30,10 +30,11 @@ trait HasMedia
          */
         static::saved(function ($model) {
             foreach (request()->input('media_relations') as $relationName => $mediaIds) {
-                $currentMedia = $model->mediaRelation()->wherePivot('collection', $relationName)->pluck('id')->all();
-                if ($currentMedia !== array_map('intval', $mediaIds)) {
-                    $model->mediaRelation()->wherePivot('collection', $relationName)->sync(
-                        collect(array_map('intval', $mediaIds))->mapWithKeys(function ($id, $sorting) use ($relationName) {
+                $mediaIds = array_map('intval', $mediaIds ?: []);
+                $currentMedia = $model->hasManyMedia($relationName)->pluck('id')->all();
+                if ($currentMedia !== $mediaIds) {
+                    $model->hasManyMedia($relationName)->sync(
+                        collect($mediaIds)->mapWithKeys(function ($id, $sorting) use ($relationName) {
                             return [$id => [
                                 'collection' => $relationName,
                                 'order_column' => $sorting
@@ -80,15 +81,12 @@ trait HasMedia
         if (!$collection) {
             $collection = $this->guessMediaRelation();
         }
-        return $this->mediaRelation($collection)->wherePivot('collection', $collection);
+        return $this->mediaRelation($collection)->wherePivot('collection', $collection)->withTimestamps();
     }
 
     public function hasOneMedia($collection = null)
     {
-        if (!$collection) {
-            $collection = $this->guessMediaRelation();
-        }
-        return $this->mediaRelation($collection)->wherePivot('collection', $collection)->single();
+        return $this->hasManyMedia($collection)->single();
     }
 
     public function guessMediaRelation()
