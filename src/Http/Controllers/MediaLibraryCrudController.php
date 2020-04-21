@@ -2,13 +2,16 @@
 
 namespace Oddvalue\BackpackMediaLibrary\Http\Controllers;
 
+use Illuminate\Support\Str;
 use Illuminate\Routing\Controller;
 use Oddvalue\BackpackMediaLibrary\Tag;
 use Oddvalue\BackpackMediaLibrary\Media;
 use Oddvalue\BackpackMediaLibrary\Uploader;
+use Oddvalue\LinkBuilder\Contracts\Linkable;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Symfony\Component\HttpFoundation\Request;
 use Oddvalue\BackpackMediaLibrary\MediaFolder;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
@@ -52,6 +55,28 @@ class MediaLibraryCrudController extends Controller
     public function show(Media $media)
     {
         return response()->json($media);
+    }
+
+    public function getMediables(Media $media)
+    {
+        $models = \DB::table('mediables')->where('media_id', $media->id)->get()->groupBy('mediable_type')
+            ->mapWithKeys(function ($mediables, $type) {
+                $type = Relation::getMorphedModel($type) ?? $type;
+                $model = new $type;
+                $mediables = $mediables->pluck('mediable_id')->unique();
+                if ($model instanceof Linkable) {
+                    $mediables = $type::find($mediables)->map(function ($instance) {
+                        return $instance->id .': '.(string) $instance->getLinkGenerator();
+                    });
+                } else {
+                    $mediables = $mediables->map(function ($id) {
+                        return "ID: $id";
+                    });
+                }
+                return [Str::title($model->getTable()) => $mediables];
+            });
+
+        return response()->json($models);
     }
 
     public function store(Request $request)
