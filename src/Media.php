@@ -23,11 +23,6 @@ class Media extends Model
         });
     }
 
-    public function mediable()
-    {
-        return $this->morphTo();
-    }
-
     public function tags()
     {
         return $this->belongsToMany(Tag::class);
@@ -36,21 +31,6 @@ class Media extends Model
     public function getValidator()
     {
         return new MediaValidator;
-    }
-
-    /**
-     * Accessor method to retrieve all media on a model
-     *
-     * @param  Illuminate\Database\Eloquent\Model  $model
-     * @return Illuminate\Database\Eloquent\Relations\MorphToMany
-     */
-    public static function forModel(Eloquent $model, $foreignKey = null)
-    {
-        if ($foreignKey) {
-            return $model->belongsTo(static::class, $foreignKey);
-        }
-
-        return $model->morphMany(static::class, 'mediable')->orderBy('sorting');
     }
 
     /**
@@ -110,18 +90,6 @@ class Media extends Model
             $filename = asset('assets/images/admin/document.png');
         }
         return $filename;
-    }
-
-    public function scopeScope($builder, $value)
-    {
-        switch ($value) {
-            case self::ACCESS_PUBLIC:
-                $builder->where('private', 0);
-                break;
-            case self::ACCESS_PRIVATE:
-                $builder->where('private', 1);
-                break;
-        }
     }
 
     /**

@@ -66,7 +66,7 @@ class MediaLibraryCrudController extends Controller
                 $mediables = $mediables->pluck('mediable_id')->unique();
                 if ($model instanceof Linkable) {
                     $mediables = $type::find($mediables)->map(function ($instance) {
-                        return $instance->id .': '.(string) $instance->getLinkGenerator();
+                        return $instance->id .': '.(string) $instance->getLinkGenerator(['target' => '_blank']);
                     });
                 } else {
                     $mediables = $mediables->map(function ($id) {

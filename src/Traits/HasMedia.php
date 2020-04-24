@@ -4,6 +4,7 @@ namespace Oddvalue\BackpackMediaLibrary\Traits;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
+use Illuminate\Support\Collection;
 use Oddvalue\BackpackMediaLibrary\Media;
 use Oddvalue\BackpackMediaLibrary\MediaRelation;
 
@@ -29,35 +30,66 @@ trait HasMedia
          * Save media relations after the model is saved
          */
         static::saved(function ($model) {
-            foreach (request()->input('media_relations') as $relationName => $mediaIds) {
-                $mediaIds = array_map('intval', $mediaIds ?: []);
-                $currentMedia = $model->hasManyMedia($relationName)->pluck('id')->all();
-                if ($currentMedia !== $mediaIds) {
-                    $model->hasManyMedia($relationName)->sync(
-                        collect($mediaIds)->mapWithKeys(function ($id, $sorting) use ($relationName) {
-                            return [$id => [
-                                'collection' => $relationName,
-                                'order_column' => $sorting
-                            ]];
-                        })
-                    );
-                }
-            }
+            collect(request()->input('media_relations'))->map(function ($mediaIds, $relationName) use ($model) {
+                $model->syncMedia($relationName, $mediaIds ?: []);
+            });
         });
+    }
+
+    /**
+     * Sync media collection
+     *
+     * @param string $collection
+     * @param int|array|\Oddvalue\BackpackMediaLibrary\Media|\Illuminate\Support\Collection $media
+     * @param  bool  $detaching
+     * @return void
+     */
+    public function syncMedia(string $collection, $ids, $detaching = tue)
+    {
+        if ($ids instanceof Media) {
+            $ids = [$ids->id];
+        } elseif ($ids instanceof Collection) {
+            $ids = $ids->all();
+        } elseif (! Arr::accessible($ids)) {
+            $ids = [$ids];
+        }
+
+        if (Arr::accessible(Arr::first($ids))) {
+            $ids = Arr::pluck($ids, 'id');
+        }
+
+        $ids = array_map('intval', $ids);
+
+        $currentMedia = $this->hasManyMedia($collection)->pluck('id')->all();
+        if ($currentMedia === $ids) {
+            // Media relation hasn't changed
+            return;
+        }
+
+        return $this->hasManyMedia($collection)->sync(
+            collect($ids)->mapWithKeys(function ($id, $sorting) use ($collection) {
+                return [$id => [
+                    'collection' => $collection,
+                    'order_column' => $sorting
+                ]];
+            }),
+            $detaching
+        );
     }
 
     /**
      * Define a polymorphic one-to-many relationship.
      *
-     * @param  string|null  $collection
-     * @param  string|null  $localKey
+     * @param  string $collection
      * @return \Oddvalue\BackpackMediaLibrary\MediaRelation
      */
-    public function mediaRelation($collection = null, $localKey = null)
+    public function mediaRelation($collection = null)
     {
         $instance = $this->newRelatedInstance(Media::class);
 
-        $caller = $collection;
+        if (!$collection) {
+            $collection = $this->guessMediaRelation();
+        }
 
         $name = 'mediable';
 
@@ -67,21 +99,20 @@ trait HasMedia
 
         $table = Str::plural($name);
 
-        $localKey = $localKey ?: $this->getKeyName();
-
         return (new MediaRelation(
             $instance->newQuery(), $this, $name, $table,
             $foreignPivotKey, $relatedPivotKey, $this->getKeyName(),
-            $instance->getKeyName(), $caller, false
-        ))->withPivot(['collection', 'order_column'])->orderBy('mediables.order_column');
+            $instance->getKeyName(), $collection, false
+        ))
+            ->withPivot(['collection', 'order_column'])
+            ->orderBy('mediables.order_column')
+            ->withTimestamps()
+            ->wherePivot('collection', $collection);
     }
 
     public function hasManyMedia($collection = null)
     {
-        if (!$collection) {
-            $collection = $this->guessMediaRelation();
-        }
-        return $this->mediaRelation($collection)->wherePivot('collection', $collection)->withTimestamps();
+        return $this->mediaRelation($collection);
     }
 
     public function hasOneMedia($collection = null)

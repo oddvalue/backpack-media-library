@@ -44,8 +44,9 @@ const actions = {
       error => commit('setError', error)
     );
   },
-  edit({ commit }, { file, hiddenFields }) {
+  async edit({ commit }, { file, hiddenFields }) {
     commit('clearError');
+    file.mediables = await (await mediaApi.getMediables(file.id));
     commit('editFile', file);
     commit('setHiddenFields', hiddenFields || []);
   },

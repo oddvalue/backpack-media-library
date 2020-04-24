@@ -74,6 +74,18 @@
           <img class="img-responsive" ref="preview" :src="src" :alt="file.filename">
         </div>
       </div>
+      <fieldset class="card">
+        <div class="card-header"><strong>Linked to:</strong></div>
+          <div class="card-body">
+            <div v-for="(mediables, type) in file.mediables" :key="type">
+              <strong>{{type}}</strong>
+              <ul class="mb-0">
+                <li v-for="(item, key) in mediables" :key="key" v-html="item"></li>
+              </ul>
+            </div>
+          <div v-if="! file.mediables || file.mediables.length < 1">No links found to this file</div>
+        </div>
+      </fieldset>
     </form>
     <template v-slot:footer>
       <button type="submit" class="btn btn-primary" @click.prevent="onEditorFile">Save</button>

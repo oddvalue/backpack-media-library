@@ -33,11 +33,24 @@ export default {
    *
    * @param Int options
    */
-   async get(id, callback, errorCallback) {
-       const data = await (await window.axios.get(`/admin/media-library/${id}`)).data;
-       callback(data);
-       return data;
-   },
+  async get(id, callback, errorCallback) {
+    const data = await (await window.axios.get(`/admin/media-library/${id}`)).data;
+    callback(data);
+    return data;
+  },
+
+  /**
+   * Get everything linked to this media model
+   *
+   * @param Int options
+   */
+  async getMediables(id, callback, errorCallback) {
+    const data = await (await window.axios.get(`/admin/media-library/${id}/mediables`)).data;
+    if (callback) {
+      callback(data);
+    }
+    return data;
+  },
 
   async update(file, callback, errorCallback) {
     const formData = new FormData();
