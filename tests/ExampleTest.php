@@ -9,7 +9,6 @@ class ExampleTest extends \Orchestra\Testbench\TestCase
      */
     public function testTrueIsTrue()
     {
-        $media = new Media;
-        $this->assertEquals('test', $media->echoPhrase('test'));
+        $this->assertTrue(true);
     }
 }
