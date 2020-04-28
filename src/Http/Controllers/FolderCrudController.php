@@ -43,7 +43,10 @@ class FolderCrudController extends Controller
         }
 
         $this->validate($request, [
-            'name' => 'required|unique:media_folders,name,'.$id.',id,parent_id,'.($request->input('parent_id') ?: 'NULL'),
+            'name' => 'required|unique:media_folders,name,'
+                .$id
+                .',id,parent_id,'
+                .($request->input('parent_id') ?: 'NULL'),
             'parent_id' => 'int|exists:media_folders,id',
         ], [
             'name.unique' => "There is already a folder called '{$request->input('name')}' in this folder",

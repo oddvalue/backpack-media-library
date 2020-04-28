@@ -63,7 +63,7 @@ class MediaBrowserField extends Field
     public function offsetGet($key)
     {
         switch ($key) {
-            case 'fake';
+            case 'fake':
                 return false;
 
             default:

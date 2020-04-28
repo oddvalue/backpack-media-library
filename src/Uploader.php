@@ -70,7 +70,8 @@ class Uploader
      */
     public function replace(UploadedFile $uploadedFile, Media $instance)
     {
-        if (pathinfo(public_path($instance->getFilename()))['extension'] !== $uploadedFile->getClientOriginalExtension()) {
+        $currentExtension = pathinfo(public_path($instance->getFilename()))['extension'];
+        if ($currentExtension !== $uploadedFile->getClientOriginalExtension()) {
             throw new \Exception("Cannot replace a file with a different extension", 1);
         }
 

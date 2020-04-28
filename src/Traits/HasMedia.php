@@ -100,9 +100,16 @@ trait HasMedia
         $table = Str::plural($name);
 
         return (new MediaRelation(
-            $instance->newQuery(), $this, $name, $table,
-            $foreignPivotKey, $relatedPivotKey, $this->getKeyName(),
-            $instance->getKeyName(), $collection, false
+            $instance->newQuery(),
+            $this,
+            $name,
+            $table,
+            $foreignPivotKey,
+            $relatedPivotKey,
+            $this->getKeyName(),
+            $instance->getKeyName(),
+            $collection,
+            false
         ))
             ->withPivot(['collection', 'order_column'])
             ->orderBy('mediables.order_column')

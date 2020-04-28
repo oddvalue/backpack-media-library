@@ -25,7 +25,8 @@ class MediaFolder extends Model
         return $this->hasMany(MediaFolder::class, 'parent_id');
     }
 
-    public function indentDescendants($collection, $depth = 0) {
+    public function indentDescendants($collection, $depth = 0)
+    {
         $collection->push((object)[
             'indentedName' => str_repeat('─', $depth) . ' ' . $this->name,
             'name' => $this->name,
