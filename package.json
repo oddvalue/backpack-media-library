@@ -15,7 +15,8 @@
   },
   "author": "",
   "license": "ISC",
-  "dependencies": {
+  "dependencies": {},
+  "devDependencies": {
     "@tinymce/tinymce-vue": "^3.2.0",
     "axios": "^0.19.2",
     "browser-sync": "^2.26.7",
@@ -39,9 +40,7 @@
     "vue-toasted": "^1.1.27",
     "vue-upload-component": "^2.8.20",
     "vuex": "^3.1.2",
-    "webpack-shell-plugin": "^0.5.0"
-  },
-  "devDependencies": {
+    "webpack-shell-plugin": "^0.5.0",
     "@babel/core": "^7.8.6",
     "@babel/preset-env": "^7.8.6",
     "babel-loader": "^8.0.6",
