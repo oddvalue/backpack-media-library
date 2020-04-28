@@ -1,4 +1,6 @@
-# Backpack Media Library
+# WIP: Backpack Media Library
+
+This package is a work in progress and is not production ready.
 
 [![Latest Version on Packagist][ico-version]][link-packagist]
 [![Software License][ico-license]](LICENSE.md)
@@ -13,7 +15,7 @@ Upload and manage you media in Backpack for Laravel v4.
 
 - Laravel 6.x
 - Backpack 4.x
-- Tested with PHP 7.3 but may work below
+- PHP 7.3+
 
 ## Install
 

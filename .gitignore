@@ -1,7 +1,5 @@
-build
+/vendor/
 composer.lock
-vendor
-phpcs.xml
-phpunit.xml
+/build/
 .phpunit.result.cache
 node_modules
